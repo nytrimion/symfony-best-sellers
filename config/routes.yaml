@@ -1,6 +1,6 @@
 api_v1:
     prefix: api/v1
     resource:
-        path: ../src/Application/Http/V1
-        namespace: App\Application\Http\V1
+        path: ../src/Application/Api/V1
+        namespace: App\Application\Api\V1
     type: attribute

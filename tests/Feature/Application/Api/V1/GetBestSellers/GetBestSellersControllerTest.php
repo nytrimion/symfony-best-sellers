@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Feature\Application\Http\V1\GetBestSellers;
+namespace App\Tests\Feature\Application\Api\V1\GetBestSellers;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
