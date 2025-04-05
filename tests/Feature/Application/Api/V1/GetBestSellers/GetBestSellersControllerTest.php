@@ -26,8 +26,8 @@ final class GetBestSellersControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertSame(200, $response->getStatusCode());
 
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertSame('OK', $responseData['status']);
+        $json = json_decode($response->getContent(), true);
+        $this->assertSame('OK', $json['status']);
     }
 
     public function testItReturnsSuccessfulResponseWithAllGivenParameters(): void
@@ -36,8 +36,8 @@ final class GetBestSellersControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertSame(200, $response->getStatusCode());
 
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertSame('OK', $responseData['status']);
+        $json = json_decode($response->getContent(), true);
+        $this->assertSame('OK', $json['status']);
     }
 
     public function testItReturnsValidationErrorsWhenGivenParameterAreInvalid(): void
@@ -46,11 +46,11 @@ final class GetBestSellersControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertSame(422, $response->getStatusCode());
 
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertSame(422, $responseData['status']);
-        $this->assertSame('Validation Failed', $responseData['title']);
-        $this->assertStringContainsString('isbn[0]: This value is neither a valid ISBN-10 nor a valid ISBN-13', $responseData['detail']);
-        $this->assertStringContainsString('isbn[1]: This value is neither a valid ISBN-10 nor a valid ISBN-13', $responseData['detail']);
-        $this->assertStringContainsString('offset: This value should be a multiple of 20', $responseData['detail']);
+        $json = json_decode($response->getContent(), true);
+        $this->assertSame(422, $json['status']);
+        $this->assertSame('Validation Failed', $json['title']);
+        $this->assertStringContainsString('isbn[0]: This value is neither a valid ISBN-10 nor a valid ISBN-13', $json['detail']);
+        $this->assertStringContainsString('isbn[1]: This value is neither a valid ISBN-10 nor a valid ISBN-13', $json['detail']);
+        $this->assertStringContainsString('offset: This value should be a multiple of 20', $json['detail']);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure\Book\Repository;
 
-use App\Domain\Book\Query\GetBestSellers\GetBestSellersQuery;
+use App\Domain\Book\Dto\BestSellersQuery;
 use App\Domain\Book\Repository\BookRepositoryException;
 use App\Infrastructure\Book\Repository\NewYorkTimesBookRepository;
 use PHPUnit\Framework\TestCase;
@@ -32,82 +32,82 @@ final class NewYorkTimesBookRepositoryTest extends TestCase
 
     public function testGetBestSellersReturnsResponseWhenNewYorkTimesApiResponseIsSuccessful(): void
     {
-        $httpResponse = new JsonMockResponse(['foo' => 'bar']);
+        $apiResponse = new JsonMockResponse(['foo' => 'bar']);
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
-        $actual = $this->sut->getBestSellers(new GetBestSellersQuery());
+        $response = $this->sut->getBestSellers(new BestSellersQuery());
 
-        $this->assertSame('GET', $httpResponse->getRequestMethod());
-        $this->assertSame('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345', $httpResponse->getRequestUrl());
-        $this->assertSame(['Accept: application/json'], $httpResponse->getRequestOptions()['headers']);
-        $this->assertSame(['foo' => 'bar'], $actual);
+        $this->assertSame('GET', $apiResponse->getRequestMethod());
+        $this->assertSame('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345', $apiResponse->getRequestUrl());
+        $this->assertSame(['Accept: application/json'], $apiResponse->getRequestOptions()['headers']);
+        $this->assertSame(['foo' => 'bar'], $response->json);
     }
 
     public function testGetBestSellersReturnsResponseWithAllQueryParameters(): void
     {
-        $httpResponse = new JsonMockResponse();
+        $apiResponse = new JsonMockResponse();
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
-        $this->sut->getBestSellers(new GetBestSellersQuery(
+        $this->sut->getBestSellers(new BestSellersQuery(
             author: 'John',
             title: 'Whatever',
             isbn: ['0553293389', '9780553293388'],
             offset: 40,
         ));
 
-        $this->assertStringEndsWith('?author=John&title=Whatever&isbn=0553293389;9780553293388&offset=40&api-key=12345', $httpResponse->getRequestUrl());
+        $this->assertStringEndsWith('?author=John&title=Whatever&isbn=0553293389;9780553293388&offset=40&api-key=12345', $apiResponse->getRequestUrl());
     }
 
     public function testGetBestSellersThrowsBookRepositoryExceptionWhenHttpClientConnectionHasFailed(): void
     {
-        $httpResponse = new MockResponse(info: ['error' => 'host unreachable']);
+        $apiResponse = new MockResponse(info: ['error' => 'host unreachable']);
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
         $this->expectException(BookRepositoryException::class);
         $this->expectExceptionMessage('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345');
         $this->expectExceptionCode(0);
 
-        $this->sut->getBestSellers(new GetBestSellersQuery());
+        $this->sut->getBestSellers(new BestSellersQuery());
     }
 
     public function testGetBestSellersThrowsBookRepositoryExceptionWhenNewYorkTimesApiResponseHasFailed(): void
     {
-        $httpResponse = new MockResponse(info: ['http_code' => 429]);
+        $apiResponse = new MockResponse(info: ['http_code' => 429]);
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
         $this->expectException(BookRepositoryException::class);
         $this->expectExceptionMessage('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345');
         $this->expectExceptionCode(429);
 
-        $this->sut->getBestSellers(new GetBestSellersQuery());
+        $this->sut->getBestSellers(new BestSellersQuery());
     }
     public function testGetBestSellersThrowsBookRepositoryExceptionWhenNewYorkTimesApiResponseHasNoJsonContent(): void
     {
-        $httpResponse = new MockResponse([new \RuntimeException('Failed to read json content')]);
+        $apiResponse = new MockResponse([new \RuntimeException('Failed to read json content')]);
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
         $this->expectException(BookRepositoryException::class);
         $this->expectExceptionMessage('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345');
         $this->expectExceptionCode(0);
 
-        $this->sut->getBestSellers(new GetBestSellersQuery());
+        $this->sut->getBestSellers(new BestSellersQuery());
     }
 
     public function testGetBestSellersThrowsBookRepositoryExceptionWhenNewYorkTimesApiResponseIsScalar(): void
     {
-        $httpResponse = new JsonMockResponse('"string"');
+        $apiResponse = new JsonMockResponse('"string"');
 
-        $this->httpClient->setResponseFactory($httpResponse);
+        $this->httpClient->setResponseFactory($apiResponse);
 
         $this->expectException(BookRepositoryException::class);
         $this->expectExceptionMessage('https://api.example.com/books/v3/lists/best-sellers/history.json?api-key=12345');
         $this->expectExceptionCode(0);
 
-        $this->sut->getBestSellers(new GetBestSellersQuery());
+        $this->sut->getBestSellers(new BestSellersQuery());
     }
 }
