@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Domain\Book\Repository;
 
-use App\Domain\Book\Query\GetBestSellers\GetBestSellersQuery;
+use App\Domain\Book\Dto\BestSellersQuery;
+use App\Domain\Book\Dto\BestSellersResponse;
 
 interface BookRepository
 {
     /**
-     * @return array<string, mixed>
      * @throws BookRepositoryException
      */
-    public function getBestSellers(GetBestSellersQuery $query): array;
+    public function getBestSellers(BestSellersQuery $query): BestSellersResponse;
 }

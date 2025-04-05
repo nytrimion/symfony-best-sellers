@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Book\Repository;
 
-use App\Domain\Book\Query\GetBestSellers\GetBestSellersQuery;
+use App\Domain\Book\Dto\BestSellersQuery;
+use App\Domain\Book\Dto\BestSellersResponse;
 use App\Domain\Book\Repository\BookRepository;
 use App\Domain\Book\Repository\BookRepositoryException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -20,13 +21,15 @@ final readonly class NewYorkTimesBookRepository implements BookRepository
         private string $apiKey,
     ) {}
 
-    public function getBestSellers(GetBestSellersQuery $query): array
+    public function getBestSellers(BestSellersQuery $query): BestSellersResponse
     {
         $params = array_merge((array) $query, [
             'isbn' => implode(';', $query->isbn),
         ]);
 
-        return $this->getJson(self::BEST_SELLERS_ENDPOINT, $params);
+        return new BestSellersResponse(
+            $this->getJson(self::BEST_SELLERS_ENDPOINT, $params),
+        );
     }
 
     /**
@@ -38,7 +41,7 @@ final readonly class NewYorkTimesBookRepository implements BookRepository
     private function getJson(string $endpoint, array $params): array
     {
         $url = $this->getEndpointUrl($endpoint);
-        $queryParams = $this->createQueryParams($params);
+        $queryParams = $this->sanitizeHttpQueryParamsWithApiKey($params);
         $options = [
             'headers' => [
                 'Accept' => 'application/json',
@@ -71,13 +74,13 @@ final readonly class NewYorkTimesBookRepository implements BookRepository
      *
      * @return array<string, mixed>
      */
-    private function createQueryParams(array $params): array
+    private function sanitizeHttpQueryParamsWithApiKey(array $params): array
     {
         $params = array_merge($params, [
             self::API_KEY_PARAM => $this->apiKey,
         ]);
 
-        return $this->sanitizeParams($params);
+        return $this->sanitizeHttpQueryParams($params);
     }
 
     /**
@@ -85,7 +88,7 @@ final readonly class NewYorkTimesBookRepository implements BookRepository
      *
      * @return array<string, mixed>
      */
-    private function sanitizeParams(array $params): array
+    private function sanitizeHttpQueryParams(array $params): array
     {
         return array_filter(
             $params,

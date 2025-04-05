@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Book\Query\GetBestSellers;
+namespace App\Domain\Book\Dto;
 
-final readonly class GetBestSellersQuery
+final readonly class BestSellersQuery
 {
     /**
      * @param string[] $isbn
