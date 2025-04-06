@@ -6,7 +6,7 @@ namespace App\Application\Api\V1\GetBestSellers;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final readonly class GetBestSellersRequest
+final readonly class GetBestSellersQueryParams
 {
     public function __construct(
         public ?string $author,
