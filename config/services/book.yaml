@@ -1,0 +1,13 @@
+parameters:
+    app.new_york_times_api_url: '%env(NYT_API_URL)%'
+    app.new_york_times_api_key: '%env(NYT_API_KEY)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Infrastructure\Book\Repository\NewYorkTimesBookRepository:
+        arguments:
+            $apiUrl: '%app.new_york_times_api_url%'
+            $apiKey: '%app.new_york_times_api_key%'
