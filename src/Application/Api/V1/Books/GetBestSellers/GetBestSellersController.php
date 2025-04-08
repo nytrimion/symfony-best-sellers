@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Api\V1\GetBestSellers;
+namespace App\Application\Api\V1\Books\GetBestSellers;
 
 use App\Domain\Book\Query\GetBestSellers\GetBestSellersHandler;
 use App\Domain\Book\Query\GetBestSellers\GetBestSellersQuery;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/best-sellers', name: 'best_sellers')]
+#[Route(path: '/best-sellers', name: 'best_sellers', methods: ['GET'])]
 final class GetBestSellersController extends AbstractController
 {
     public function __construct(

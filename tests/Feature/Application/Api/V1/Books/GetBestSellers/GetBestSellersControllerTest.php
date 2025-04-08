@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Feature\Application\Api\V1\GetBestSellers;
+namespace App\Tests\Feature\Application\Api\V1\Books\GetBestSellers;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GetBestSellersControllerTest extends WebTestCase
 {
-    private const string ENDPOINT_URL = '/api/v1/best-sellers';
+    private const string ENDPOINT_URL = '/api/v1/books/best-sellers';
 
     private KernelBrowser $client;
     private HttpClientInterface $httpClient;

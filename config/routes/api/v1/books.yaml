@@ -1,0 +1,7 @@
+books:
+    prefix: /books
+    name_prefix: books_
+    resource:
+        path: ../../../../src/Application/Api/V1/Books
+        namespace: App\Application\Api\V1\Books
+    type: attribute
