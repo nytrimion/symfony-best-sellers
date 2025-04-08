@@ -1,6 +1,9 @@
 api_v1:
     prefix: api/v1
-    resource:
-        path: ../src/Application/Api/V1
-        namespace: App\Application\Api\V1
-    type: attribute
+    name_prefix: api_v1_
+    resource: routes/api/v1/*.yaml
+
+api_v2:
+    prefix: api/v2
+    name_prefix: api_v2_
+    resource: routes/api/v2/*.yaml
